@@ -1,11 +1,48 @@
 <html>
 <head>
-  <title>Carte multi lieux</title>
+  <title>Carte réalisations | Bois des Alpes</title>
   <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+  <style>
+html, body, .map_canvas {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.map_canvas {
+    position: relative;
+}
+</style>
 </head>
 <body>
-  <div id="map" style="height: 800px; width: auto;">
-</div>
+<nav>
+  <div class="nav-wrapper">
+    <a href="http://boisdesalpes.net/realisations.php" class="brand-logo">&nbsp; Réalisations</a>
+  <ul id="slide-out" class="side-nav">
+    <li>
+      <div class="userView">
+        <div class="background"><img src="http://www.produits-traitement-bois.com/Files/30848/Img/07/photo-huile-bois-Aquadure-avec-sans-3-couches.jpg"></div>
+        <a href="https://twitter.com/yurayko"><img class="circle" src="https://lh3.googleusercontent.com/-8iadNIor1gA/AAAAAAAAAAI/AAAAAAAAAvs/QK8w7Jl4PSY/s60-p-rw-no/photo.jpg"></a>
+        <a href="https://plus.google.com/u/0/+JurajKr%C4%8DTurba"><span class="white-text name">Yuraï K-TURBA</span></a>
+        <span class="white-text email">technicien(chez)simplix.fr</span>
+      </div>
+    </li>
+    <li><a href="http://boisdesalpes.net/"><i class="material-icons">business</i>Bois des Alpes</a></li>
+    <li><a href="http://simplix.fr/"><i class="material-icons">language</i>Simplix France</a></li>
+    <li><div class="divider"></div></li>
+    <li><a class="subheader">&copy; Simplix.fr</a></li>
+  </ul>
+  <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+    <ul class="right hide-on-med-and-down">
+      <li><a href="http://boisdesalpes.net/">Bois des Alpes</a></li>
+      <li><a href="http://simplix.fr/">Simplix.fr</a></li>
+    </ul>
+  </div>
+</nav>
+<div id="map" class="map_canvas"></div>
 <script type="text/javascript">
     var locations = [
       ['Bois des Alpes', 45.56396299999999, 5.925507000000039, 1],
@@ -42,23 +79,18 @@
       ['Bâtiment multifonctionnel de Saint Jean d\'Arvey', 45.5863175, 5.9960856, 32],
       ['Rénovation externe du parement du centre forestier de la Bastide de Jourdans', 43.784867, 5.6343541, 33]
     ];
-
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 8,
-      center: new google.maps.LatLng(45.56396299999999, 5.925507000000039),
+      center: new google.maps.LatLng(45.1863463, 5.7361186),
       mapTypeId: google.maps.MapTypeId.ROADMAP
     });
-
     var infowindow = new google.maps.InfoWindow();
-
     var marker, i;
-
     for (i = 0; i < locations.length; i++) { 
       marker = new google.maps.Marker({
         position: new google.maps.LatLng(locations[i][1], locations[i][2]),
         map: map
       });
-
       google.maps.event.addListener(marker, 'click', (function(marker, i) {
         return function() {
           infowindow.setContent(locations[i][0]);
@@ -66,6 +98,12 @@
         }
       })(marker, i));
     }
+  </script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+  <script>
+    $(".button-collapse").sideNav();
   </script>
 </body>
 </html>
