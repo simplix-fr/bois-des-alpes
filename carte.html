@@ -1,19 +1,16 @@
 <html>
 <head>
   <title>Carte réalisations | Bois des Alpes</title>
-  <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <!-- Compiled and minified CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
   <style>
-html, body, .map_canvas {
-    width: 100%;
+html, body {
     height: 100%;
     margin: 0;
     padding: 0;
 }
-.map_canvas {
-    position: relative;
+#map {
+    height: 100%;
 }
 </style>
 </head>
@@ -42,68 +39,79 @@ html, body, .map_canvas {
     </ul>
   </div>
 </nav>
-<div id="map" class="map_canvas"></div>
-<script type="text/javascript">
-    var locations = [
-      ['Bois des Alpes', 45.56396299999999, 5.925507000000039, 1],
-      ['Gymnase LEGTA Carmejane', 44.0321655, 6.1354588, 2],
-      ['Office National des Forêts Barrême', 43.954846, 6.369276, 3],
-      ['Centre de vacances de la Fontaine d\'Annibal', 44.284631, 5.282455, 4],
-      ['Collège de Beaumont-les-Valence', 44.8606345, 4.9420009, 5],
-      ['Plateaux pédagogiques de Néopolis sur Rovaltain', 44.988114, 4.977144, 6],
-      ['Salle des Fetes intercommunale Sivu de Bagnol St Michel sur Savasse', 45.1451958, 5.1213328, 7],
-      ['Collège et gymnase de Rumilly', 45.8408612, 5.959447, 8],
-      ['Atelier municipal à Abriès', 44.794345, 6.9273868, 9],
-      ['Bergerie d\'Orcières', 44.696778, 6.32187, 10],
-      ['La cabane des Cloutas Chalet multiacceuil ski de fond', 44.6934207, 5.891746, 11],
-      ['Galerie de l\'Alpe au Jardin alpin du Col du Lautaret', 45.0354314, 6.4007783, 12],
-      ['Groupe scolaire de Guillestre', 44.6620813, 6.6532797, 13],
-      ['Habitat participatif Habrico à Briançon', 44.8897492, 6.6333775, 14],
-      ['Maison intercommunale du tourisme à Château Ville Vieille', 44.7557222, 6.7898113, 15],
-      ['Observatoire astronomique du Pic Chateau Renard Saint Véran', 44.69864, 6.9040593, 16],
-      ['Refuge de l\'Aigle de la FFCAM à Villar d\'Arène', 45.0114372, 6.3247471, 17],
-      ['Atelier de charpente à Corps', 44.7979948, 5.9085442, 18],
-      ['Bâtiment du Conseil Général de l\'Isère à Mens', 44.8155142, 5.7509845, 19],
-      ['Maison du Conseil Général de l\'Isère à Villard de Lans', 45.0746319, 5.5556481, 20],
-      ['Groupe Scolaire de La Rivière 38', 45.2365831, 5.5085106, 21],
-      ['Groupe scolaire de Saint Pierre d\'Entremont', 45.4176704, 5.8512422, 22],
-      ['Gymnase d\'Allevard', 45.3936519,6.070587, 23],
-      ['Hangar de stockage de plaquettes Bois Energie', 45.2363411,5.5059042, 24],
-      ['Maison de l\'Intercommunalité du Vercors à Villard de Lans', 45.0703232, 5.5543292, 25],
-      ['Mairie de Saint Honoré', 44.954125, 5.807188, 26],
-      ['Maison de territoire du Voironnais', 45.3632445, 5.5928699, 27],
-      ['Espace multiactivité de Saint-Pierre-d\'Entremont', 45.4151412, 5.8547981, 28],
-      ['Groupe scolaire de Saint Rémy de Maurienne', 45.393263, 6.266337, 29],
-      ['Extension de la Maison du Parc des Bauges Chatelard', 45.6811718, 6.1383376, 30],
-      ['Pont routier Cognin', 45.557767, 5.898596, 31],
-      ['Bâtiment multifonctionnel de Saint Jean d\'Arvey', 45.5863175, 5.9960856, 32],
-      ['Rénovation externe du parement du centre forestier de la Bastide de Jourdans', 43.784867, 5.6343541, 33]
-    ];
-    var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 8,
-      center: new google.maps.LatLng(45.1863463, 5.7361186),
-      mapTypeId: google.maps.MapTypeId.ROADMAP
+  <div id="map"></div>
+  <script>
+function initMap() {
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 8,
+    center: {lat: 45.1863463, lng: 5.7361186}
+  });
+  setMarkers(map);
+}
+var beaches = [
+  ['Bois des Alpes', 45.56396299999999, 5.925507000000039, 1],
+  ['Gymnase LEGTA Carmejane', 44.0321655, 6.1354588, 2],
+  ['Office National des Forêts Barrême', 43.954846, 6.369276, 3],
+  ['Centre de vacances de la Fontaine d\'Annibal', 44.284631, 5.282455, 4],
+  ['Collège de Beaumont-les-Valence', 44.8606345, 4.9420009, 5],
+  ['Plateaux pédagogiques de Néopolis sur Rovaltain', 44.988114, 4.977144, 6],
+  ['Salle des Fetes intercommunale Sivu de Bagnol St Michel sur Savasse', 45.1451958, 5.1213328, 7],
+  ['Collège et gymnase de Rumilly', 45.8408612, 5.959447, 8],
+  ['Atelier municipal à Abriès', 44.794345, 6.9273868, 9],
+  ['Bergerie d\'Orcières', 44.696778, 6.32187, 10],
+  ['La cabane des Cloutas Chalet multiacceuil ski de fond', 44.6934207, 5.891746, 11],
+  ['Galerie de l\'Alpe au Jardin alpin du Col du Lautaret', 45.0354314, 6.4007783, 12],
+  ['Groupe scolaire de Guillestre', 44.6620813, 6.6532797, 13],
+  ['Habitat participatif Habrico à Briançon', 44.8897492, 6.6333775, 14],
+  ['Maison intercommunale du tourisme à Château Ville Vieille', 44.7557222, 6.7898113, 15],
+  ['Observatoire astronomique du Pic Chateau Renard Saint Véran', 44.69864, 6.9040593, 16],
+  ['Refuge de l\'Aigle de la FFCAM à Villar d\'Arène', 45.0114372, 6.3247471, 17],
+  ['Atelier de charpente à Corps', 44.7979948, 5.9085442, 18],
+  ['Bâtiment du Conseil Général de l\'Isère à Mens', 44.8155142, 5.7509845, 19],
+  ['Maison du Conseil Général de l\'Isère à Villard de Lans', 45.0746319, 5.5556481, 20],
+  ['Groupe Scolaire de La Rivière 38', 45.2365831, 5.5085106, 21],
+  ['Groupe scolaire de Saint Pierre d\'Entremont', 45.4176704, 5.8512422, 22],
+  ['Gymnase d\'Allevard', 45.3936519,6.070587, 23],
+  ['Hangar de stockage de plaquettes Bois Energie', 45.2363411,5.5059042, 24],
+  ['Maison de l\'Intercommunalité du Vercors à Villard de Lans', 45.0703232, 5.5543292, 25],
+  ['Mairie de Saint Honoré', 44.954125, 5.807188, 26],
+  ['Maison de territoire du Voironnais', 45.3632445, 5.5928699, 27],
+  ['Espace multiactivité de Saint-Pierre-d\'Entremont', 45.4151412, 5.8547981, 28],
+  ['Groupe scolaire de Saint Rémy de Maurienne', 45.393263, 6.266337, 29],
+  ['Extension de la Maison du Parc des Bauges Chatelard', 45.6811718, 6.1383376, 30],
+  ['Pont routier Cognin', 45.557767, 5.898596, 31],
+  ['Bâtiment multifonctionnel de Saint Jean d\'Arvey', 45.5863175, 5.9960856, 32],
+  ['Rénovation externe du parement du centre forestier de la Bastide de Jourdans', 43.784867, 5.6343541, 33]
+];
+function setMarkers(map) {
+  var image = {
+    url: 'images/beachflag.png',
+    size: new google.maps.Size(20, 32),
+    origin: new google.maps.Point(0, 0),
+    anchor: new google.maps.Point(0, 32)
+  };
+  var shape = {
+    coords: [1, 1, 1, 20, 18, 20, 18, 1],
+    type: 'poly'
+  };
+  for (var i = 0; i < beaches.length; i++) {
+    var beach = beaches[i];
+    var marker = new google.maps.Marker({
+      position: {lat: beach[1], lng: beach[2]},
+      map: map,
+      icon: image,
+      shape: shape,
+      title: beach[0],
+      zIndex: beach[3]
     });
-    var infowindow = new google.maps.InfoWindow();
-    var marker, i;
-    for (i = 0; i < locations.length; i++) { 
-      marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-        map: map
-      });
-      google.maps.event.addListener(marker, 'click', (function(marker, i) {
-        return function() {
-          infowindow.setContent(locations[i][0]);
-          infowindow.open(map, marker);
-        }
-      })(marker, i));
-    }
+  }
+}
   </script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJS7RiwwHCMto0Y-5OxVE3Zs3uCZ3mQcc&callback=initMap"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <!-- Compiled and minified JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
   <script>
     $(".button-collapse").sideNav();
   </script>
-</body>
+  </body>
 </html>
